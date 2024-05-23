@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const productRoutes = require('./routes/product.routes');
 const rabbitmqConfig = require('../../config/rabbitmq.config');
 const amqplib = require('amqplib');
+require('../../db');
 
 const app = express();
 const PORT = process.env.PRODUCT_SERVICE_PORT || 3002;

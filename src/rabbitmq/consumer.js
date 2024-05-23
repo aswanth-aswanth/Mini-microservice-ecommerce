@@ -15,10 +15,15 @@ const consumeMessages = async (queue, callback) => {
       callback(receivedMessage);
 
       channel.ack(message);
-    });
+    }, { noAck: false });
   } catch (error) {
     console.error('Error consuming messages from RabbitMQ:', error);
   }
 };
 
-module.exports = { consumeMessages };
+const handleProductCreatedEvent = (product) => {
+  console.log('Product created:', product);
+  // Perform additional actions or send notifications for the product created event
+};
+
+consumeMessages('product_created', handleProductCreatedEvent);

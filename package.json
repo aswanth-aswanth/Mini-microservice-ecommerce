@@ -1,25 +1,27 @@
 {
-    "name": "my-microservice-project",
-    "version": "1.0.0",
-    "description": "A microservice project using Node.js and RabbitMQ",
-    "main": "index.js",
-    "scripts": {
-      "start": "concurrently \"npm:start:*\"",
-      "start:auth": "nodemon src/services/auth-service/index.js",
-      "start:user": "nodemon src/services/user-service/index.js",
-      "start:product": "nodemon src/services/product-service/index.js"
-    },
-    "dependencies": {
-      "amqplib": "^0.10.3",
-      "bcryptjs": "^2.4.3",
-      "cors": "^2.8.5",
-      "dotenv": "^16.0.3",
-      "express": "^4.18.2",
-      "jsonwebtoken": "^9.0.0",
-      "morgan": "^1.10.0"
-    },
-    "devDependencies": {
-      "concurrently": "^7.6.0",
-      "nodemon": "^2.0.20"
-    }
+  "name": "my-microservice-project",
+  "version": "1.0.0",
+  "description": "A microservice project using Node.js and RabbitMQ",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"npm:start:*\"",
+    "start:auth": "nodemon src/services/auth-service/index.js",
+    "start:user": "nodemon src/services/user-service/index.js",
+    "start:product": "nodemon src/services/product-service/index.js",
+    "start:rabbitmq": "node src/rabbitmq/consumer.js"
+  },
+  "dependencies": {
+    "amqplib": "^0.10.3",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^8.4.0",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0",
+    "nodemon": "^2.0.20"
   }
+}

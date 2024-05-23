@@ -1,56 +1,61 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { generateToken } = require('../utils/jwt.utils');
-
-// Mock user data
-const users = [
-  { id: 1, username: 'user1', password: '$2a$10$cW6kc5xdVOBm/refNDdHeeiKRzYQKBRXDdkRvRdXmhGbZwBaAd3OO' },
-  { id: 2, username: 'user2', password: '$2a$10$cW6kc5xdVOBm/refNDdHeeiKRzYQKBRXDdkRvRdXmhGbZwBaAd3OO' },
-];
+const User = require('../../../db/models/user.model');
 
 exports.registerUser = async (req, res) => {
-  const { username, password } = req.body;
+  const { username, password, email } = req.body;
 
-  // Check if the username already exists
-  const userExists = users.some((user) => user.username === username);
-  if (userExists) {
-    return res.status(400).json({ message: 'Username already exists' });
+  try {
+    // Check if the username or email already exists
+    const userExists = await User.findOne({ $or: [{ username }, { email }] });
+    if (userExists) {
+      return res.status(400).json({ message: 'Username or email already exists' });
+    }
+
+    // Hash the password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Create a new user
+    const newUser = new User({
+      username,
+      password: hashedPassword,
+      email,
+    });
+    await newUser.save();
+
+    res.status(201).json({ message: 'User registered successfully' });
+  } catch (error) {
+    console.error('Error registering user:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
-
-  // Hash the password
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
-
-  // Create a new user
-  const newUser = {
-    id: users.length + 1,
-    username,
-    password: hashedPassword,
-  };
-  users.push(newUser);
-
-  res.status(201).json({ message: 'User registered successfully' });
 };
 
 exports.loginUser = async (req, res) => {
   const { username, password } = req.body;
 
-  // Find the user by username
-  const user = users.find((user) => user.username === username);
-  if (!user) {
-    return res.status(400).json({ message: 'Invalid username or password' });
+  try {
+    // Find the user by username
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid username or password' });
+    }
+
+    // Verify the password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(400).json({ message: 'Invalid username or password' });
+    }
+
+    // Generate a JWT token
+    const token = generateToken(user._id, user.username);
+
+    res.status(200).json({ token });
+  } catch (error) {
+    console.error('Error logging in user:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
-
-  // Verify the password
-  const isPasswordValid = await bcrypt.compare(password, user.password);
-  if (!isPasswordValid) {
-    return res.status(400).json({ message: 'Invalid username or password' });
-  }
-
-  // Generate a JWT token
-  const token = generateToken(user.id, user.username);
-
-  res.status(200).json({ token });
 };
 
 exports.verifyToken = (req, res) => {

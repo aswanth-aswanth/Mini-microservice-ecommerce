@@ -6,14 +6,14 @@ const userRoutes = require("./routes/user.routes");
 const rabbitmqConfig = require("../../config/rabbitmq.config");
 const amqplib = require("amqplib");
 
-
 const app = express();
 const PORT = process.env.USER_SERVICE_PORT || 3001;
-console.count("env user : ",process.env.USER_SERVICE_PORT);
+console.count("env user : ", process.env.USER_SERVICE_PORT);
 // Middleware
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
+require("../../db");
 
 // Routes
 app.use("/api/users", userRoutes);

@@ -1,20 +1,26 @@
-// Mock user data
-const users = [
-  { id: 1, username: 'user1', email: 'user1@example.com' },
-  { id: 2, username: 'user2', email: 'user2@example.com' },
-];
+const User = require('../../../db/models/user.model');
 
-exports.getAllUsers = (req, res) => {
-  res.status(200).json(users);
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({}, { password: 0 });
+    res.status(200).json(users);
+  } catch (error) {
+    console.error('Error getting users:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 };
 
-exports.getUserById = (req, res) => {
-  const userId = parseInt(req.params.id);
-  const user = users.find((user) => user.id === userId);
+exports.getUserById = async (req, res) => {
+  const userId = req.params.id;
 
-  if (!user) {
-    return res.status(404).json({ message: 'User not found' });
+  try {
+    const user = await User.findById(userId, { password: 0 });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    console.error('Error getting user by ID:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
-
-  res.status(200).json(user);
 };

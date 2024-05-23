@@ -14,6 +14,7 @@ console.count("env auth : ", process.env.AUTH_SERVICE_PORT);
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
+require("../../db");
 
 // Routes
 app.use("/api/auth", authRoutes);

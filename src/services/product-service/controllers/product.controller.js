@@ -1,34 +1,47 @@
-// Mock product data
-let products = [
-    { id: 1, name: 'Product 1', price: 9.99 },
-    { id: 2, name: 'Product 2', price: 19.99 },
-  ];
-  
-  exports.getAllProducts = (req, res) => {
+const Product = require('../../../db/models/product.model');
+const productCreatedEvent = require('../../../events/product-events/product-created.event');
+
+exports.getAllProducts = async (req, res) => {
+  try {
+    const products = await Product.find({});
     res.status(200).json(products);
-  };
-  
-  exports.getProductById = (req, res) => {
-    const productId = parseInt(req.params.id);
-    const product = products.find((product) => product.id === productId);
-  
+  } catch (error) {
+    console.error('Error getting products:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+exports.getProductById = async (req, res) => {
+  const productId = req.params.id;
+
+  try {
+    const product = await Product.findById(productId);
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
-  
     res.status(200).json(product);
-  };
-  
-  exports.createProduct = (req, res) => {
-    const { name, price } = req.body;
-  
-    const newProduct = {
-      id: products.length + 1,
+  } catch (error) {
+    console.error('Error getting product by ID:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+exports.createProduct = async (req, res) => {
+  const { name, price } = req.body;
+
+  try {
+    const newProduct = new Product({
       name,
       price,
-    };
-  
-    products.push(newProduct);
-  
-    res.status(201).json(newProduct);
-  };
+    });
+    const savedProduct = await newProduct.save();
+
+    // Emit the product created event
+    await productCreatedEvent(savedProduct);
+
+    res.status(201).json(savedProduct);
+  } catch (error) {
+    console.error('Error creating product:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
