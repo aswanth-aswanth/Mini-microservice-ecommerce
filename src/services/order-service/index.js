@@ -5,6 +5,7 @@ const morgan = require("morgan");
 const rabbitmqConfig = require("../../config/rabbitmq.config");
 const amqplib = require("amqplib");
 require("dotenv").config();
+const { consumeOrderMessages } = require('./rabbitmq/consumer');
 
 
 const app = express();
@@ -30,6 +31,8 @@ const connectToRabbitMQ = async () => {
 };
 
 connectToRabbitMQ();
+
+consumeOrderMessages();
 
 app.listen(PORT, () => {
   console.log(`Order Service is running on port ${PORT}`);

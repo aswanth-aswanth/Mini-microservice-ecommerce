@@ -26,7 +26,7 @@ const consumeMessage = async (queue) => {
 
   } catch (error) {
     console.error('Error consuming message from RabbitMQ:', error);
-    throw error; // Propagate the error to handle it upstream
+    throw error; 
   }
 };
 
