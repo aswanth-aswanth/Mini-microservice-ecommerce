@@ -1,6 +1,6 @@
 const amqplib = require('amqplib');
 const rabbitmqConfig = require('../config/rabbitmq.config');
-const Order = require('../models/order.model');
+const Order = require('../db/models/order.model');
 
 const consumeOrderMessages = async () => {
   try {

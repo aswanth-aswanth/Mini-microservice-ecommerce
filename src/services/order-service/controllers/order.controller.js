@@ -1,5 +1,5 @@
-const Order = require('../models/order.model');
-const { sendMessage } = require('../../../rabbitmq/producer');
+const Order = require('../db/models/order.model');
+const { sendMessage } = require('../rabbitmq/producer');
 
 exports.createOrder = async (req, res) => {
   const { productId, userId, quantity } = req.body;

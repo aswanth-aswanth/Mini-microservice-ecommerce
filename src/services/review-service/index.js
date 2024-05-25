@@ -3,7 +3,7 @@ const reviewRoutes = require('./routes/review.routes');
 require("dotenv").config();
 const cors = require("cors");
 const morgan = require("morgan");
-const rabbitmqConfig = require("../../config/rabbitmq.config");
+const rabbitmqConfig = require("./config/rabbitmq.config");
 const amqplib = require("amqplib");
 require('dotenv').config();
 
@@ -15,7 +15,7 @@ const PORT = process.env.REVIEW_SERVICE_PORT || 5006;
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
-require("../../db");
+require("./db");
 
 // Routes
 app.use('/reviews', reviewRoutes);

@@ -9,8 +9,7 @@
     "start:user": "nodemon src/services/user-service/index.js",
     "start:product": "nodemon src/services/product-service/index.js",
     "start:order": "nodemon src/services/order-service/index.js",
-    "start:review": "nodemon src/services/review-service/index.js",
-    "start:rabbitmq": "node src/rabbitmq/consumer.js"
+    "start:review": "nodemon src/services/review-service/index.js"
   },
   "dependencies": {
     "amqplib": "^0.10.3",

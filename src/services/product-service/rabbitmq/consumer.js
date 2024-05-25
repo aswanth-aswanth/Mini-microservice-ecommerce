@@ -1,7 +1,7 @@
 const amqplib = require("amqplib");
 const rabbitmqConfig = require("../config/rabbitmq.config");
-const Product = require("../../../db/models/product.model");
-const { sendMessage } = require("../../../rabbitmq/producer");
+const Product = require("../db/models/product.model");
+const { sendMessage } = require("../rabbitmq/producer");
 
 const consumeProductMessages = async () => {
   try {

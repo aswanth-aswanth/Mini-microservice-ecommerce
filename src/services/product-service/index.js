@@ -3,10 +3,10 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const productRoutes = require("./routes/product.routes");
-const rabbitmqConfig = require("../../config/rabbitmq.config");
+const rabbitmqConfig = require("./config/rabbitmq.config");
 const { consumeProductMessages } = require("./rabbitmq/consumer");
 const amqplib = require("amqplib");
-require("../../db");
+require("./db");
 
 const app = express();
 const PORT = process.env.PRODUCT_SERVICE_PORT || 3002;

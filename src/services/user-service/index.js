@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const userRoutes = require("./routes/user.routes");
-const rabbitmqConfig = require("../../config/rabbitmq.config");
+const rabbitmqConfig = require("./config/rabbitmq.config");
 const amqplib = require("amqplib");
 require("dotenv").config();
 
@@ -12,7 +12,7 @@ const PORT = process.env.USER_SERVICE_PORT || 3001;
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
-require("../../db");
+require("./db");
 
 // Routes
 app.use("/users", userRoutes);

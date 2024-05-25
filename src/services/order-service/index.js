@@ -2,7 +2,7 @@ const express = require("express");
 const orderRoutes = require("./routes/order.routes");
 const cors = require("cors");
 const morgan = require("morgan");
-const rabbitmqConfig = require("../../config/rabbitmq.config");
+const rabbitmqConfig = require("./config/rabbitmq.config");
 const amqplib = require("amqplib");
 require("dotenv").config();
 const { consumeOrderMessages } = require('./rabbitmq/consumer');
@@ -15,7 +15,7 @@ const PORT = process.env.ORDER_SERVICE_PORT || 5003;
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
-require("../../db");
+require("./db");
 
 app.use("/orders", orderRoutes);
 
