@@ -8,14 +8,22 @@ const consumeProductMessages = async () => {
     const connection = await amqplib.connect(rabbitmqConfig.url);
     const channel = await connection.createChannel();
 
-    await channel.assertQueue('check_product_quantity', { durable: true });
+    await channel.assertQueue("check_product_quantity", { durable: true });
 
-    console.log('Product consumer listening for messages in check_product_quantity');
+    console.log(
+      "Product consumer listening for messages in check_product_quantity"
+    );
 
-    channel.consume('check_product_quantity', async (message) => {
+    channel.consume("check_product_quantity", async (message) => {
       if (message !== null) {
-        const { orderId, productId, quantity } = JSON.parse(message.content.toString());
-        console.log('Received message from check_product_quantity:', { orderId, productId, quantity });
+        const { orderId, productId, quantity } = JSON.parse(
+          message.content.toString()
+        );
+        console.log("Received message from check_product_quantity:", {
+          orderId,
+          productId,
+          quantity,
+        });
 
         // Check product quantity
         const product = await Product.findById(productId);
@@ -25,17 +33,23 @@ const consumeProductMessages = async () => {
           await product.save();
 
           // Send confirmation message
-          await sendMessage('order_update_status', { orderId, status: 'completed' });
+          await sendMessage("order_update_status", {
+            orderId,
+            status: "completed",
+          });
         } else {
           // Send cancellation message
-          await sendMessage('order_update_status', { orderId, status: 'cancelled' });
+          await sendMessage("order_update_status", {
+            orderId,
+            status: "cancelled",
+          });
         }
 
         channel.ack(message); // Acknowledge the message
       }
     });
   } catch (error) {
-    console.error('Error consuming product messages from RabbitMQ:', error);
+    console.error("Error consuming product messages from RabbitMQ:", error);
     throw error; // Propagate the error to handle it upstream
   }
 };

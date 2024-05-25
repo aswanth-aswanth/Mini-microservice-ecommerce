@@ -36,9 +36,6 @@ exports.createProduct = async (req, res) => {
     });
     const savedProduct = await newProduct.save();
 
-    // Emit product_created event
-    await sendMessage('product_created', savedProduct); 
-
     res.status(201).json(savedProduct);
   } catch (error) {
     console.error("Error creating product:", error);

@@ -18,7 +18,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 // Routes
-app.use("/api/products", productRoutes);
+app.use("/products", productRoutes);
 
 // RabbitMQ connection
 let rabbitmqChannel;

@@ -15,7 +15,7 @@ app.use(express.json());
 require("../../db");
 
 // Routes
-app.use("/api/users", userRoutes);
+app.use("/users", userRoutes);
 
 // RabbitMQ connection
 let rabbitmqChannel;
