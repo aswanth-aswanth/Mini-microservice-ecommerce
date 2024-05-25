@@ -1,4 +1,5 @@
 const Product = require('../../../db/models/product.model');
+const { sendMessage } = require('../../../rabbitmq/producer');
 const productCreatedEvent = require('../../../events/product-events/product-created.event');
 
 exports.getAllProducts = async (req, res) => {
@@ -26,6 +27,7 @@ exports.getProductById = async (req, res) => {
   }
 };
 
+
 exports.createProduct = async (req, res) => {
   const { name, price } = req.body;
 
@@ -36,8 +38,8 @@ exports.createProduct = async (req, res) => {
     });
     const savedProduct = await newProduct.save();
 
-    // Emit the product created event
-    await productCreatedEvent(savedProduct);
+    // Emit product_created event
+    productCreatedEvent.emit('product_created', savedProduct);
 
     res.status(201).json(savedProduct);
   } catch (error) {

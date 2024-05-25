@@ -1,29 +1,33 @@
 const amqplib = require('amqplib');
 const rabbitmqConfig = require('../config/rabbitmq.config');
+const Review = require('../models/review.model');
 
-const consumeMessages = async (queue, callback) => {
+const consumeMessage = async (queue) => {
   try {
     const connection = await amqplib.connect(rabbitmqConfig.url);
     const channel = await connection.createChannel();
 
     await channel.assertQueue(queue, { durable: true });
 
-    console.log(`Waiting for messages in ${queue}...`);
+    console.log(`Consumer listening for messages in ${queue}`);
 
-    channel.consume(queue, (message) => {
-      const receivedMessage = JSON.parse(message.content.toString());
-      callback(receivedMessage);
+    channel.consume(queue, async (message) => {
+      if (message !== null) {
+        const messageContent = JSON.parse(message.content.toString());
+        console.log(`Received message from ${queue}:`, messageContent);
 
-      channel.ack(message);
-    }, { noAck: false });
+        // Example: Process the message (save to MongoDB)
+        const newReview = new Review(messageContent);
+        await newReview.save();
+
+        channel.ack(message); // Acknowledge the message
+      }
+    });
+
   } catch (error) {
-    console.error('Error consuming messages from RabbitMQ:', error);
+    console.error('Error consuming message from RabbitMQ:', error);
+    throw error; // Propagate the error to handle it upstream
   }
 };
 
-const handleProductCreatedEvent = (product) => {
-  console.log('Product created:', product);
-  // Perform additional actions or send notifications for the product created event
-};
-
-consumeMessages('product_created', handleProductCreatedEvent);
+module.exports = { consumeMessage };

@@ -11,13 +11,14 @@ const sendMessage = async (queue, message) => {
     const messageBuffer = Buffer.from(JSON.stringify(message));
     channel.sendToQueue(queue, messageBuffer);
 
-    console.log(`Message sent to ${queue}: ${message}`);
+    console.log(`Message sent to ${queue}:`, message);
 
     setTimeout(() => {
       connection.close();
     }, 500);
   } catch (error) {
     console.error('Error sending message to RabbitMQ:', error);
+    throw error; // Propagate the error to handle it upstream
   }
 };
 

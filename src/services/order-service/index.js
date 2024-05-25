@@ -1,23 +1,23 @@
 const express = require("express");
+const orderRoutes = require("./routes/order.routes");
 const cors = require("cors");
 const morgan = require("morgan");
-const userRoutes = require("./routes/user.routes");
 const rabbitmqConfig = require("../../config/rabbitmq.config");
 const amqplib = require("amqplib");
 require("dotenv").config();
 
+
 const app = express();
-const PORT = process.env.USER_SERVICE_PORT || 3001;
+const PORT = process.env.ORDER_SERVICE_PORT || 5003;
+
 // Middleware
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 require("../../db");
 
-// Routes
-app.use("/api/users", userRoutes);
+app.use("/orders", orderRoutes);
 
-// RabbitMQ connection
 let rabbitmqChannel;
 const connectToRabbitMQ = async () => {
   try {
@@ -31,7 +31,6 @@ const connectToRabbitMQ = async () => {
 
 connectToRabbitMQ();
 
-// Start server
 app.listen(PORT, () => {
-  console.log(`User service running on port ${PORT}`);
+  console.log(`Order Service is running on port ${PORT}`);
 });

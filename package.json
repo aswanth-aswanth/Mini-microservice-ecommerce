@@ -8,6 +8,9 @@
     "start:auth": "nodemon src/services/auth-service/index.js",
     "start:user": "nodemon src/services/user-service/index.js",
     "start:product": "nodemon src/services/product-service/index.js",
+    "start:order": "nodemon src/services/order-service/index.js",
+    "start:review": "nodemon src/services/review-service/index.js",
+    "start:payment": "nodemon src/services/payment-service/index.js",
     "start:rabbitmq": "node src/rabbitmq/consumer.js"
   },
   "dependencies": {

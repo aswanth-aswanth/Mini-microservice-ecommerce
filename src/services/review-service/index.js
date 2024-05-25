@@ -1,13 +1,16 @@
-const express = require("express");
+const express = require('express');
+const reviewRoutes = require('./routes/review.routes');
+require("dotenv").config();
 const cors = require("cors");
 const morgan = require("morgan");
-const userRoutes = require("./routes/user.routes");
 const rabbitmqConfig = require("../../config/rabbitmq.config");
 const amqplib = require("amqplib");
-require("dotenv").config();
+require('dotenv').config();
+
 
 const app = express();
-const PORT = process.env.USER_SERVICE_PORT || 3001;
+const PORT = process.env.REVIEW_SERVICE_PORT || 5006;
+
 // Middleware
 app.use(cors());
 app.use(morgan("dev"));
@@ -15,7 +18,7 @@ app.use(express.json());
 require("../../db");
 
 // Routes
-app.use("/api/users", userRoutes);
+app.use('/reviews', reviewRoutes);
 
 // RabbitMQ connection
 let rabbitmqChannel;
@@ -28,10 +31,9 @@ const connectToRabbitMQ = async () => {
     console.error("Error connecting to RabbitMQ:", error);
   }
 };
-
 connectToRabbitMQ();
 
-// Start server
+
 app.listen(PORT, () => {
-  console.log(`User service running on port ${PORT}`);
+    console.log(`Review Service is running on port ${PORT}`);
 });
