@@ -1,13 +1,31 @@
 version: '3.8'
 
 services:
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3.6-management-alpine
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - my_network
+
   api-gateway:
     build: 
-      context: ./api-gateway
+      context: ./src/api-gateway
       dockerfile: Dockerfile
     container_name: api-gateway
     ports:
-      - "3000:3000"
+      - "4000:4000"
     environment:
       - NODE_ENV=development
     depends_on:
@@ -95,23 +113,24 @@ services:
     networks:
       - my_network
 
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    networks:
-      - my_network
-
   mongo:
     image: mongo:latest
     container_name: mongo
     ports:
       - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
     networks:
       - my_network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
 networks:
   my_network:
     driver: bridge
+
+volumes:
+  mongo_data:

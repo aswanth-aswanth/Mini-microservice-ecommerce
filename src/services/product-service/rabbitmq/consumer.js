@@ -5,6 +5,8 @@ const { sendMessage } = require("../rabbitmq/producer");
 
 const consumeProductMessages = async () => {
   try {
+    console.log("RABBITMQ CONFIG URL : ", rabbitmqConfig.url);
+    console.log("process env : ", process.env.RABBITMQ_URL);
     const connection = await amqplib.connect(rabbitmqConfig.url);
     const channel = await connection.createChannel();
 

@@ -4,11 +4,11 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 const app = express();
 
 const services = { 
-  auth: 'http://localhost:3000',
-  order: 'http://localhost:5003',
-  product: 'http://localhost:3002',
-  review: 'http://localhost:5006',
-  user: 'http://localhost:3001',
+  auth: 'http://auth-service:3000',  // Use the service name and port defined in Docker Compose
+  order: 'http://order-service:5003',
+  product: 'http://product-service:3002',
+  review: 'http://review-service:5006',
+  user: 'http://user-service:3001',
 };
 
 app.use('/auth', createProxyMiddleware({ target: services.auth, changeOrigin: true }));

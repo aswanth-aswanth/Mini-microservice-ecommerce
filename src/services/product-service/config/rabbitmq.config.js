@@ -1,3 +1,3 @@
 module.exports = {
-    url: process.env.RABBITMQ_URL || 'amqp://localhost',
+    url: 'amqp://guest:guest@rabbitmq:5672/',
   };
