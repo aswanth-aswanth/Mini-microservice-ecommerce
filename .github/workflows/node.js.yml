@@ -40,7 +40,7 @@ jobs:
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        workdir: ./src/services/product-service
+        dockerfile: ./src/services/product-service/Dockerfile
 
     - name: Build and Push Docker Image - User Service
       uses: mr-smithers-excellent/docker-build-push@v6
@@ -49,7 +49,7 @@ jobs:
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        workdir: ./src/services/user-service
+        dockerfile: ./src/services/user-service/Dockerfile
 
     - name: Build and Push Docker Image - Auth Service
       uses: mr-smithers-excellent/docker-build-push@v6
@@ -58,7 +58,7 @@ jobs:
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        workdir: ./src/services/auth-service
+        dockerfile: ./src/services/auth-service/Dockerfile
 
     - name: Build and Push Docker Image - API Gateway
       uses: mr-smithers-excellent/docker-build-push@v6
@@ -67,7 +67,7 @@ jobs:
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        workdir: ./src/services/api-gateway
+        dockerfile: ./src/services/api-gateway/Dockerfile
 
     - name: Build and Push Docker Image - Review Service
       uses: mr-smithers-excellent/docker-build-push@v6
@@ -76,7 +76,7 @@ jobs:
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        workdir: ./src/services/review-service
+        dockerfile: ./src/services/review-service/Dockerfile
 
     - name: Build and Push Docker Image - Order Service
       uses: mr-smithers-excellent/docker-build-push@v6
@@ -85,4 +85,4 @@ jobs:
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        workdir: ./src/services/order-service
+        dockerfile: ./src/services/order-service/Dockerfile
