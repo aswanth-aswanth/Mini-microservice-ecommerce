@@ -26,6 +26,55 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+    
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test --if-present
+
+    - name: Build and Push Docker Image - Product Service
+      uses: mr-smithers-excellent/docker-build-push@v6
+      with:
+        image: aswantht/product-service
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+    
+    - name: Build and Push Docker Image - User Service
+      uses: mr-smithers-excellent/docker-build-push@v6
+      with:
+        image: aswantht/user-service
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build and Push Docker Image - Auth Service
+      uses: mr-smithers-excellent/docker-build-push@v6
+      with:
+        image: aswantht/auth-service
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build and Push Docker Image - API Gateway
+      uses: mr-smithers-excellent/docker-build-push@v6
+      with:
+        image: aswantht/api-gateway
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build and Push Docker Image - Review Service
+      uses: mr-smithers-excellent/docker-build-push@v6
+      with:
+        image: aswantht/review-service
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build and Push Docker Image - Order Service
+      uses: mr-smithers-excellent/docker-build-push@v6
+      with:
+        image: aswantht/order-service
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
